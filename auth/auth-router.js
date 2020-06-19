@@ -1,3 +1,4 @@
+require("dotenv").config()
 const router = require('express').Router();
 const bcryptjs = require('bcrypt')
 const jwt = require('jsonwebtoken')
@@ -11,13 +12,9 @@ router.post("/register", (req, res) => {
 
   if (isValid(credentials)) {
       const rounds = process.env.BCRYPT_ROUNDS || 8;
-
-      // hash the password
       const hash = bcryptjs.hashSync(credentials.password, rounds);
-
       credentials.password = hash;
 
-      // save the user to the database
       Users.add(credentials)
           .then(user => {
               res.status(201).json({ data: user });
@@ -38,7 +35,6 @@ router.post("/login", (req, res) => {
   if (isValid(req.body)) {
       Users.findBy({ username: username })
           .then(([user]) => {
-              // compare the password the hash stored in the database
               console.log("user", user);
               if (user && bcryptjs.compareSync(password, user.password)) {
                   const token = createToken(user);
@@ -65,7 +61,7 @@ const createToken = user => {
     }
 
     const secret = constants.jwtSecret
-
+    
     const options = {
         expiresIn: "1d",
     };
