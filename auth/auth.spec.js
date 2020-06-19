@@ -5,7 +5,6 @@ const db = require('../database/dbConfig');
 
 describe('auth-router.js', () => {
   // register user
-
   describe('POST /register', () => {
     beforeEach(async () => {
       await db('users').truncate();
@@ -30,7 +29,7 @@ describe('auth-router.js', () => {
     })
 
   })
-  //login 
+  //login user
   describe('POST /login', () => {
     it('should return 400 if sent no credentials', () => {
         return supertest(server).post('/api/auth/login')
@@ -53,7 +52,7 @@ describe('auth-router.js', () => {
 
 
 
-  // GET JOKES
+  // get jokes
   describe('GET to /api/jokes', () => {
     it('should get a list of jokes', () => {
       return supertest(server)
